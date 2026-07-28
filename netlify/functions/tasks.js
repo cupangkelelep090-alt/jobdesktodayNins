@@ -2,11 +2,11 @@ import { getStore } from "@netlify/blobs";
 
 const store = () => getStore("todos");
 
-const json = (status, body) => ({
-  statusCode: status,
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(body),
-});
+const json = (status, body) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
 
 const keyFor = (date) => `tasks-${date}`;
 
