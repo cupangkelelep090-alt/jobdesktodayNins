@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rencana Hari Ini</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky-dawn: #EEF1F6;
+    --sky-day: #E4ECFB;
+    --ink: #1F2937;
+    --ink-soft: #6B7280;
+    --surface: #FFFFFF;
+    --line: #E2E6EE;
+    --sun: #F5A623;
+    --sun-soft: #FCE3B6;
+    --done: #2F9E64;
+    --done-soft: #DCF3E6;
+    --danger: #E15A5A;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(180deg, var(--sky-dawn) 0%, var(--sky-day) 100%);
+    font-family: 'Inter', sans-serif;
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px 80px;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 520px;
+  }
+
+  header {
+    margin-bottom: 24px;
+  }
+
+  .greeting {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    margin: 0 0 4px;
+  }
+
+  .datestamp {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-transform: capitalize;
+  }
+
+  /* --- Signature element: horizon progress --- */
+  .horizon {
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 18px 20px;
+  }
+
+  .horizon-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .horizon-label {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .horizon-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .horizon-track {
+    position: relative;
+    height: 8px;
+    background: #EEF0F4;
+    border-radius: 999px;
+    overflow: visible;
+  }
+
+  .horizon-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--sun-soft), var(--sun));
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  .horizon-sun {
+    position: absolute;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    background: var(--sun);
+    border: 3px solid var(--surface);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px var(--sun);
+    transform: translate(-50%, -50%);
+    left: 0%;
+    transition: left 0.5s ease;
+  }
+
+  /* --- Composer --- */
+  .composer {
+    margin-top: 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .composer-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  input[type="text"], input[type="time"] {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    background: #FAFBFD;
+    color: var(--ink);
+    outline: none;
+  }
+
+  input[type="text"] { flex: 1; min-width: 0; }
+  input[type="time"] { width: 118px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+  input[type="text"]:focus, input[type="time"]:focus {
+    border-color: var(--sun);
+    background: #fff;
+  }
+
+  button.add-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 16px;
+    cursor: pointer;
+  }
+
+  button.add-btn:hover { background: #33415A; }
+  button.add-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .hint {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* --- Task list --- */
+  .list {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .task {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .task.done { opacity: 0.55; }
+
+  .checkbox {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .checkbox.checked {
+    background: var(--done);
+    border-color: var(--done);
+    color: #fff;
+    font-size: 12px;
+  }
+
+  .task-body { flex: 1; min-width: 0; }
+
+  .task-text {
+    font-size: 15px;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  .task.done .task-text { text-decoration: line-through; }
+
+  .task-meta {
+    margin-top: 4px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .time-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--sun);
+    background: var(--sun-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .notified-badge {
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  .delete-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+
+  .delete-btn:hover { color: var(--danger); }
+
+  .empty {
+    margin-top: 32px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+  }
+
+  .empty-sun {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .status-note {
+    margin-top: 28px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <p class="greeting" id="greeting">Pagi!</p>
+      <p class="datestamp" id="datestamp"></p>
+    </header>
+
+    <div class="horizon">
+      <div class="horizon-top">
+        <span class="horizon-label">Progres hari ini</span>
+        <span class="horizon-count" id="progress-count">0 / 0</span>
+      </div>
+      <div class="horizon-track">
+        <div class="horizon-fill" id="horizon-fill"></div>
+        <div class="horizon-sun" id="horizon-sun"></div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="composer-row">
+        <input type="text" id="task-input" placeholder="Apa yang mau dikerjakan?" maxlength="140" />
+        <input type="time" id="time-input" />
+      </div>
+      <div class="composer-row">
+        <button class="add-btn" id="add-btn">Tambah</button>
+        <span class="hint">Isi jam kalau mau diingatkan otomatis lewat Telegram.</span>
+      </div>
+    </div>
+
+    <div class="list" id="list"></div>
+    <div class="empty" id="empty" style="display:none;">
+      <span class="empty-sun">☀️</span>
+      Belum ada rencana hari ini. Tulis yang pertama di atas.
+    </div>
+
+    <p class="status-note">Reminder Telegram dicek otomatis tiap 15 menit sesuai jam yang kamu set.</p>
+  </div>
+
+<script>
+  const API = "/api/tasks";
+
+  function todayKey() {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function setGreeting() {
+    const hour = new Date().getHours();
+    const el = document.getElementById("greeting");
+    if (hour < 11) el.textContent = "Pagi, gaskeun!";
+    else if (hour < 15) el.textContent = "Siang, semangat!";
+    else if (hour < 18) el.textContent = "Sore, dikit lagi!";
+    else el.textContent = "Malam, kelarin dulu yuk!";
+
+    document.getElementById("datestamp").textContent = new Date().toLocaleDateString("id-ID", {
+      weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+  }
+
+  async function fetchTasks() {
+    const res = await fetch(`${API}?date=${todayKey()}`);
+    const data = await res.json();
+    render(data.tasks || []);
+  }
+
+  async function addTask() {
+    const textInput = document.getElementById("task-input");
+    const timeInput = document.getElementById("time-input");
+    const text = textInput.value.trim();
+    if (!text) return;
+
+    const btn = document.getElementById("add-btn");
+    btn.disabled = true;
+    const res = await fetch(`${API}?date=${todayKey()}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, time: timeInput.value || null }),
+    });
+    const data = await res.json();
+    render(data.tasks || []);
+    textInput.value = "";
+    timeInput.value = "";
+    btn.disabled = false;
+    textInput.focus();
+  }
+
+  async function toggleTask(id, done) {
+    const res = await fetch(`${API}?date=${todayKey()}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, done }),
+    });
+    const data = await res.json();
+    render(data.tasks || []);
+  }
+
+  async function deleteTask(id) {
+    const res = await fetch(`${API}?date=${todayKey()}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    const data = await res.json();
+    render(data.tasks || []);
+  }
+
+  function render(tasks) {
+    const list = document.getElementById("list");
+    const empty = document.getElementById("empty");
+    list.innerHTML = "";
+
+    if (tasks.length === 0) {
+      empty.style.display = "block";
+    } else {
+      empty.style.display = "none";
+    }
+
+    tasks
+      .slice()
+      .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
+      .forEach((task) => {
+        const el = document.createElement("div");
+        el.className = "task" + (task.done ? " done" : "");
+        el.innerHTML = `
+          <div class="checkbox ${task.done ? "checked" : ""}">${task.done ? "✓" : ""}</div>
+          <div class="task-body">
+            <div class="task-text"></div>
+            <div class="task-meta">
+              ${task.time ? `<span class="time-badge">${task.time}</span>` : ""}
+              ${task.time && task.notified ? `<span class="notified-badge">terkirim ke Telegram</span>` : ""}
+            </div>
+          </div>
+          <button class="delete-btn" title="Hapus">×</button>
+        `;
+        el.querySelector(".task-text").textContent = task.text;
+        el.querySelector(".checkbox").addEventListener("click", () => toggleTask(task.id, !task.done));
+        el.querySelector(".delete-btn").addEventListener("click", () => deleteTask(task.id));
+        list.appendChild(el);
+      });
+
+    const doneCount = tasks.filter((t) => t.done).length;
+    const total = tasks.length;
+    const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+    document.getElementById("progress-count").textContent = `${doneCount} / ${total}`;
+    document.getElementById("horizon-fill").style.width = `${pct}%`;
+    document.getElementById("horizon-sun").style.left = `${pct}%`;
+  }
+
+  document.getElementById("add-btn").addEventListener("click", addTask);
+  document.getElementById("task-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") addTask();
+  });
+
+  setGreeting();
+  fetchTasks();
+</script>
+</body>
+</html>
