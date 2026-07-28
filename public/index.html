@@ -37,7 +37,7 @@
     padding: 32px 16px 80px;
   }
 
-  .app { width: 100%; max-width: 720px; }
+  .app { width: 100%; max-width: 920px; }
 
   header {
     display: flex;
@@ -118,6 +118,162 @@
     .stats { grid-template-columns: repeat(2, 1fr); }
   }
 
+  /* --- Board (Trello-style) --- */
+  .board {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  @media (max-width: 720px) {
+    .board { flex-direction: column; }
+  }
+
+  .board-col {
+    flex: 1;
+    min-width: 0;
+    background: #F3F7FE;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .col-header { display: flex; align-items: center; justify-content: space-between; }
+
+  .col-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    margin: 0;
+  }
+
+  .col-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .col-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 40px;
+  }
+
+  .col-list.drag-over { background: var(--done-soft); border-radius: 10px; }
+
+  .col-empty {
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    padding: 12px 0;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 11px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    cursor: grab;
+  }
+
+  .card.dragging { opacity: 0.4; }
+  .card.done { opacity: 0.55; }
+
+  .checkbox {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+
+  .checkbox.checked { background: var(--done); border-color: var(--done); color: #fff; font-size: 11px; }
+
+  .card-body { flex: 1; min-width: 0; }
+  .card-text { font-size: 14px; line-height: 1.4; word-break: break-word; }
+  .card.done .card-text { text-decoration: line-through; }
+
+  .card-meta { margin-top: 4px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+  .time-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--sun);
+    background: var(--sun-soft);
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+
+  .notified-badge { font-size: 10px; color: var(--ink-soft); }
+
+  .card-actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+
+  .icon-btn {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    padding: 2px 4px;
+  }
+
+  .icon-btn.move:hover { color: var(--done); }
+  .icon-btn.del:hover { color: var(--danger); }
+
+  .col-composer { display: flex; flex-direction: column; gap: 6px; }
+  .col-composer-row { display: flex; gap: 6px; }
+
+  input[type="text"], input[type="time"] {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 8px 10px;
+    background: #FAFBFD;
+    color: var(--ink);
+    outline: none;
+  }
+
+  input[type="text"] { flex: 1; min-width: 0; }
+  input[type="time"] { width: 100px; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  input[type="text"]:focus, input[type="time"]:focus { border-color: var(--sun); background: #fff; }
+
+  button.add-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    border-radius: 9px;
+    background: var(--ink);
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  button.add-btn:hover { background: #0D2C5C; }
+  button.add-btn:disabled { opacity: 0.5; cursor: default; }
+
+  .hint { font-size: 11px; color: var(--ink-soft); }
+
+  /* --- History panel --- */
   .history-strip {
     display: flex;
     gap: 8px;
@@ -149,54 +305,7 @@
   }
 
   .hc-count { font-size: 13px; font-weight: 600; color: var(--ink); }
-
   .history-empty { font-size: 13px; color: var(--ink-soft); }
-
-  .composer {
-    margin-bottom: 20px;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .composer-row { display: flex; gap: 8px; }
-
-  input[type="text"], input[type="time"] {
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 10px 12px;
-    background: #FAFBFD;
-    color: var(--ink);
-    outline: none;
-  }
-
-  input[type="text"] { flex: 1; min-width: 0; }
-  input[type="time"] { width: 118px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
-
-  input[type="text"]:focus, input[type="time"]:focus { border-color: var(--sun); background: #fff; }
-
-  button.add-btn {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    border: none;
-    border-radius: 10px;
-    background: var(--ink);
-    color: #fff;
-    padding: 10px 16px;
-    cursor: pointer;
-  }
-
-  button.add-btn:hover { background: #33415A; }
-  button.add-btn:disabled { opacity: 0.5; cursor: default; }
-
-  .hint { font-size: 12px; color: var(--ink-soft); }
 
   .readonly-note {
     font-size: 12px;
@@ -205,7 +314,7 @@
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 12px 14px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
   .list { display: flex; flex-direction: column; gap: 10px; }
@@ -221,55 +330,13 @@
   }
 
   .task.done { opacity: 0.55; }
-
-  .checkbox {
-    flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 2px solid var(--line);
-    background: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-  }
-
-  .checkbox.locked { cursor: default; }
-  .checkbox.checked { background: var(--done); border-color: var(--done); color: #fff; font-size: 12px; }
-
+  .task .checkbox.locked { cursor: default; }
   .task-body { flex: 1; min-width: 0; }
   .task-text { font-size: 15px; line-height: 1.4; word-break: break-word; }
   .task.done .task-text { text-decoration: line-through; }
-
   .task-meta { margin-top: 4px; display: flex; gap: 8px; align-items: center; }
 
-  .time-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--sun);
-    background: var(--sun-soft);
-    padding: 2px 8px;
-    border-radius: 999px;
-  }
-
-  .notified-badge { font-size: 11px; color: var(--ink-soft); }
-
-  .delete-btn {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    color: var(--ink-soft);
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    padding: 2px 4px;
-  }
-
-  .delete-btn:hover { color: var(--danger); }
-
-  .empty { margin-top: 32px; text-align: center; color: var(--ink-soft); font-size: 14px; }
+  .empty { margin-top: 24px; text-align: center; color: var(--ink-soft); font-size: 14px; }
   .empty-sun { font-size: 28px; display: block; margin-bottom: 8px; }
 
   .status-note {
@@ -289,14 +356,14 @@
         <p class="datestamp" id="datestamp"></p>
       </div>
       <div class="tabs">
-        <button class="tab active" id="tab-today">Hari ini</button>
+        <button class="tab active" id="tab-board">Papan</button>
         <button class="tab" id="tab-history">Riwayat</button>
       </div>
     </header>
 
     <div class="stats">
       <div class="stat-card">
-        <p class="stat-label">Total task</p>
+        <p class="stat-label">Total hari ini</p>
         <p class="stat-value total" id="stat-total">0</p>
       </div>
       <div class="stat-card">
@@ -313,31 +380,59 @@
       </div>
     </div>
 
+    <div id="board-panel">
+      <div class="board">
+        <div class="board-col" data-col="today">
+          <div class="col-header">
+            <p class="col-title">Hari ini</p>
+            <span class="col-count" id="today-count">0 task</span>
+          </div>
+          <div class="col-list" id="today-list"></div>
+          <p class="col-empty" id="today-empty">Belum ada task.</p>
+          <div class="col-composer">
+            <div class="col-composer-row">
+              <input type="text" id="today-input" placeholder="Tambah task hari ini..." maxlength="140" />
+            </div>
+            <div class="col-composer-row">
+              <input type="time" id="today-time" />
+              <button class="add-btn" id="today-add">Tambah</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="board-col" data-col="tomorrow">
+          <div class="col-header">
+            <p class="col-title">Besok</p>
+            <span class="col-count" id="tomorrow-count">0 task</span>
+          </div>
+          <div class="col-list" id="tomorrow-list"></div>
+          <p class="col-empty" id="tomorrow-empty">Belum ada task.</p>
+          <div class="col-composer">
+            <div class="col-composer-row">
+              <input type="text" id="tomorrow-input" placeholder="Tambah task besok..." maxlength="140" />
+            </div>
+            <div class="col-composer-row">
+              <input type="time" id="tomorrow-time" />
+              <button class="add-btn" id="tomorrow-add">Tambah</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:10px;">Tips: drag card ke kolom sebelah buat mindahin jadwal, atau tap ikon panah di card-nya.</p>
+    </div>
+
     <div id="history-panel" style="display:none;">
       <div class="history-strip" id="history-strip">
         <span class="history-empty">Memuat riwayat...</span>
       </div>
-    </div>
-
-    <div class="composer" id="composer">
-      <div class="composer-row">
-        <input type="text" id="task-input" placeholder="Apa yang mau dikerjakan?" maxlength="140" />
-        <input type="time" id="time-input" />
+      <div class="readonly-note" id="readonly-note" style="display:none;">
+        Lihat riwayat tanggal <strong id="readonly-date"></strong> — mode lihat saja.
       </div>
-      <div class="composer-row">
-        <button class="add-btn" id="add-btn">Tambah</button>
-        <span class="hint">Isi jam kalau mau diingatkan otomatis lewat Telegram.</span>
+      <div class="list" id="history-list"></div>
+      <div class="empty" id="history-empty" style="display:none;">
+        <span class="empty-sun">☀️</span>
+        <span>Gak ada task tercatat di tanggal ini.</span>
       </div>
-    </div>
-
-    <div class="readonly-note" id="readonly-note" style="display:none;">
-      Lihat riwayat tanggal <strong id="readonly-date"></strong> — mode lihat saja, gak bisa diedit.
-    </div>
-
-    <div class="list" id="list"></div>
-    <div class="empty" id="empty" style="display:none;">
-      <span class="empty-sun">☀️</span>
-      <span id="empty-text">Belum ada rencana hari ini. Tulis yang pertama di atas.</span>
     </div>
 
     <p class="status-note">Reminder Telegram dicek otomatis tiap 15 menit sesuai jam yang kamu set.</p>
@@ -347,16 +442,22 @@
   const API = "/api/tasks";
   const HISTORY_API = "/api/history";
 
-  let viewDate = null;
-  let editable = true;
-
-  function todayKey() {
-    const d = new Date();
+  function toKey(d) {
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, "0");
     const dd = String(d.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
   }
+
+  function todayKey() { return toKey(new Date()); }
+  function tomorrowKey() {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return toKey(d);
+  }
+
+  const TODAY = todayKey();
+  const TOMORROW = tomorrowKey();
 
   function formatDateLabel(dateStr) {
     const d = new Date(dateStr + "T00:00:00");
@@ -372,92 +473,137 @@
     else el.textContent = "Malam, kelarin dulu yuk!";
   }
 
-  async function fetchTasks(date) {
-    const res = await fetch(`${API}?date=${date}`);
+  /* ---------- Board columns (today / tomorrow) ---------- */
+
+  const columns = {
+    today: { date: TODAY, tasks: [] },
+    tomorrow: { date: TOMORROW, tasks: [] },
+  };
+
+  async function loadColumn(colId) {
+    const res = await fetch(`${API}?date=${columns[colId].date}`);
     const data = await res.json();
-    render(data.tasks || []);
+    columns[colId].tasks = data.tasks || [];
+    renderColumn(colId);
+    updateTodayStats();
   }
 
-  async function addTask() {
-    const textInput = document.getElementById("task-input");
-    const timeInput = document.getElementById("time-input");
+  function renderColumn(colId) {
+    const list = document.getElementById(`${colId}-list`);
+    const empty = document.getElementById(`${colId}-empty`);
+    const count = document.getElementById(`${colId}-count`);
+    const tasks = columns[colId].tasks;
+    list.innerHTML = "";
+
+    empty.style.display = tasks.length === 0 ? "block" : "none";
+    count.textContent = `${tasks.length} task`;
+
+    tasks
+      .slice()
+      .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
+      .forEach((task) => {
+        const otherCol = colId === "today" ? "tomorrow" : "today";
+        const arrow = colId === "today" ? "\u2192" : "\u2190";
+        const otherLabel = colId === "today" ? "Besok" : "Hari ini";
+
+        const el = document.createElement("div");
+        el.className = "card" + (task.done ? " done" : "");
+        el.draggable = true;
+        el.dataset.id = task.id;
+        el.dataset.col = colId;
+        el.innerHTML = `
+          <div class="checkbox ${task.done ? "checked" : ""}">${task.done ? "\u2713" : ""}</div>
+          <div class="card-body">
+            <div class="card-text"></div>
+            <div class="card-meta">
+              ${task.time ? `<span class="time-badge">${task.time}</span>` : ""}
+              ${task.time && task.notified ? `<span class="notified-badge">terkirim</span>` : ""}
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="icon-btn move" title="Pindah ke ${otherLabel}">${arrow}</button>
+            <button class="icon-btn del" title="Hapus">×</button>
+          </div>
+        `;
+        el.querySelector(".card-text").textContent = task.text;
+        el.querySelector(".checkbox").addEventListener("click", () => toggleCard(colId, task.id, !task.done));
+        el.querySelector(".move").addEventListener("click", () => moveCard(colId, otherCol, task));
+        el.querySelector(".del").addEventListener("click", () => deleteCard(colId, task.id));
+
+        el.addEventListener("dragstart", () => {
+          el.classList.add("dragging");
+          dragPayload = { id: task.id, from: colId };
+        });
+        el.addEventListener("dragend", () => el.classList.remove("dragging"));
+
+        list.appendChild(el);
+      });
+  }
+
+  async function addCard(colId) {
+    const textInput = document.getElementById(`${colId}-input`);
+    const timeInput = document.getElementById(`${colId}-time`);
     const text = textInput.value.trim();
     if (!text) return;
 
-    const btn = document.getElementById("add-btn");
+    const btn = document.getElementById(`${colId}-add`);
     btn.disabled = true;
-    const res = await fetch(`${API}?date=${viewDate}`, {
+    const res = await fetch(`${API}?date=${columns[colId].date}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, time: timeInput.value || null }),
     });
     const data = await res.json();
-    render(data.tasks || []);
+    columns[colId].tasks = data.tasks || [];
+    renderColumn(colId);
+    updateTodayStats();
     textInput.value = "";
     timeInput.value = "";
     btn.disabled = false;
     textInput.focus();
   }
 
-  async function toggleTask(id, done) {
-    if (!editable) return;
-    const res = await fetch(`${API}?date=${viewDate}`, {
+  async function toggleCard(colId, id, done) {
+    const res = await fetch(`${API}?date=${columns[colId].date}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, done }),
     });
     const data = await res.json();
-    render(data.tasks || []);
+    columns[colId].tasks = data.tasks || [];
+    renderColumn(colId);
+    updateTodayStats();
   }
 
-  async function deleteTask(id) {
-    if (!editable) return;
-    const res = await fetch(`${API}?date=${viewDate}`, {
+  async function deleteCard(colId, id) {
+    const res = await fetch(`${API}?date=${columns[colId].date}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
     const data = await res.json();
-    render(data.tasks || []);
+    columns[colId].tasks = data.tasks || [];
+    renderColumn(colId);
+    updateTodayStats();
   }
 
-  function render(tasks) {
-    const list = document.getElementById("list");
-    const empty = document.getElementById("empty");
-    const emptyText = document.getElementById("empty-text");
-    list.innerHTML = "";
+  async function moveCard(fromCol, toCol, task) {
+    await fetch(`${API}?date=${columns[fromCol].date}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: task.id }),
+    });
+    await fetch(`${API}?date=${columns[toCol].date}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: task.text, time: task.time }),
+    });
+    await loadColumn(fromCol);
+    await loadColumn(toCol);
+  }
 
-    emptyText.textContent = editable
-      ? "Belum ada rencana hari ini. Tulis yang pertama di atas."
-      : "Gak ada task tercatat di tanggal ini.";
-
-    empty.style.display = tasks.length === 0 ? "block" : "none";
-
-    tasks
-      .slice()
-      .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
-      .forEach((task) => {
-        const el = document.createElement("div");
-        el.className = "task" + (task.done ? " done" : "");
-        el.innerHTML = `
-          <div class="checkbox ${task.done ? "checked" : ""} ${editable ? "" : "locked"}">${task.done ? "✓" : ""}</div>
-          <div class="task-body">
-            <div class="task-text"></div>
-            <div class="task-meta">
-              ${task.time ? `<span class="time-badge">${task.time}</span>` : ""}
-              ${task.time && task.notified ? `<span class="notified-badge">terkirim ke Telegram</span>` : ""}
-            </div>
-          </div>
-          ${editable ? `<button class="delete-btn" title="Hapus">×</button>` : ""}
-        `;
-        el.querySelector(".task-text").textContent = task.text;
-        if (editable) {
-          el.querySelector(".checkbox").addEventListener("click", () => toggleTask(task.id, !task.done));
-          el.querySelector(".delete-btn").addEventListener("click", () => deleteTask(task.id));
-        }
-        list.appendChild(el);
-      });
-
+  function updateTodayStats() {
+    const tasks = columns.today.tasks;
     const doneCount = tasks.filter((t) => t.done).length;
     const total = tasks.length;
     const pending = total - doneCount;
@@ -469,12 +615,40 @@
     document.getElementById("stat-scheduled").textContent = scheduled;
   }
 
+  let dragPayload = null;
+
+  function setupDragTargets() {
+    ["today", "tomorrow"].forEach((colId) => {
+      const list = document.getElementById(`${colId}-list`);
+      list.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        list.classList.add("drag-over");
+      });
+      list.addEventListener("dragleave", () => list.classList.remove("drag-over"));
+      list.addEventListener("drop", (e) => {
+        e.preventDefault();
+        list.classList.remove("drag-over");
+        if (!dragPayload || dragPayload.from === colId) return;
+        const task = columns[dragPayload.from].tasks.find((t) => t.id === dragPayload.id);
+        if (task) moveCard(dragPayload.from, colId, task);
+        dragPayload = null;
+      });
+    });
+  }
+
+  document.getElementById("today-add").addEventListener("click", () => addCard("today"));
+  document.getElementById("tomorrow-add").addEventListener("click", () => addCard("tomorrow"));
+  document.getElementById("today-input").addEventListener("keydown", (e) => { if (e.key === "Enter") addCard("today"); });
+  document.getElementById("tomorrow-input").addEventListener("keydown", (e) => { if (e.key === "Enter") addCard("tomorrow"); });
+
+  /* ---------- History tab ---------- */
+
   async function loadHistoryStrip() {
     const strip = document.getElementById("history-strip");
     try {
       const res = await fetch(HISTORY_API);
       const data = await res.json();
-      const history = (data.history || []).filter((h) => h.date !== todayKey());
+      const history = (data.history || []).filter((h) => h.date !== TODAY && h.date !== TOMORROW);
 
       if (history.length === 0) {
         strip.innerHTML = `<span class="history-empty">Belum ada riwayat sebelumnya.</span>`;
@@ -496,50 +670,67 @@
     }
   }
 
-  function selectHistoryDate(date, chipEl) {
+  async function selectHistoryDate(date, chipEl) {
     document.querySelectorAll(".history-chip").forEach((c) => c.classList.remove("active"));
     if (chipEl) chipEl.classList.add("active");
 
-    viewDate = date;
-    editable = false;
-    document.getElementById("composer").style.display = "none";
     document.getElementById("readonly-note").style.display = "block";
     document.getElementById("readonly-date").textContent = formatDateLabel(date);
-    document.getElementById("datestamp").textContent = formatDateLabel(date);
-    fetchTasks(date);
+
+    const res = await fetch(`${API}?date=${date}`);
+    const data = await res.json();
+    renderHistoryList(data.tasks || []);
+  }
+
+  function renderHistoryList(tasks) {
+    const list = document.getElementById("history-list");
+    const empty = document.getElementById("history-empty");
+    list.innerHTML = "";
+    empty.style.display = tasks.length === 0 ? "block" : "none";
+
+    tasks
+      .slice()
+      .sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
+      .forEach((task) => {
+        const el = document.createElement("div");
+        el.className = "task" + (task.done ? " done" : "");
+        el.innerHTML = `
+          <div class="checkbox locked ${task.done ? "checked" : ""}">${task.done ? "\u2713" : ""}</div>
+          <div class="task-body">
+            <div class="task-text"></div>
+            <div class="task-meta">
+              ${task.time ? `<span class="time-badge">${task.time}</span>` : ""}
+              ${task.time && task.notified ? `<span class="notified-badge">terkirim ke Telegram</span>` : ""}
+            </div>
+          </div>
+        `;
+        el.querySelector(".task-text").textContent = task.text;
+        list.appendChild(el);
+      });
   }
 
   function switchTab(mode) {
-    document.getElementById("tab-today").classList.toggle("active", mode === "today");
+    document.getElementById("tab-board").classList.toggle("active", mode === "board");
     document.getElementById("tab-history").classList.toggle("active", mode === "history");
+    document.getElementById("board-panel").style.display = mode === "board" ? "block" : "none";
     document.getElementById("history-panel").style.display = mode === "history" ? "block" : "none";
 
-    if (mode === "today") {
-      viewDate = todayKey();
-      editable = true;
-      document.getElementById("composer").style.display = "flex";
+    if (mode === "history") {
       document.getElementById("readonly-note").style.display = "none";
-      document.getElementById("datestamp").textContent = formatDateLabel(viewDate);
-      fetchTasks(viewDate);
-    } else {
-      editable = false;
-      document.getElementById("composer").style.display = "none";
+      document.getElementById("history-list").innerHTML = "";
+      document.getElementById("history-empty").style.display = "none";
       loadHistoryStrip();
-      document.getElementById("readonly-note").style.display = "none";
     }
   }
 
-  document.getElementById("add-btn").addEventListener("click", addTask);
-  document.getElementById("task-input").addEventListener("keydown", (e) => {
-    if (e.key === "Enter") addTask();
-  });
-  document.getElementById("tab-today").addEventListener("click", () => switchTab("today"));
+  document.getElementById("tab-board").addEventListener("click", () => switchTab("board"));
   document.getElementById("tab-history").addEventListener("click", () => switchTab("history"));
 
   setGreeting();
-  viewDate = todayKey();
-  document.getElementById("datestamp").textContent = formatDateLabel(viewDate);
-  fetchTasks(viewDate);
+  document.getElementById("datestamp").textContent = formatDateLabel(TODAY);
+  setupDragTargets();
+  loadColumn("today");
+  loadColumn("tomorrow");
 </script>
 </body>
 </html>
