@@ -1,4 +1,4 @@
-# Rencana Hari Ini — To-Do List + Reminder Telegram
+# To Do List Today
 
 Website simpel buat nulis to-do list tiap pagi, tersimpan online, dan otomatis
 diingetin lewat Telegram sesuai jam yang kamu set. Full gratis, hosting di
