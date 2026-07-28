@@ -8,16 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --sky-dawn: #EEF1F6;
-    --sky-day: #E4ECFB;
-    --ink: #1F2937;
-    --ink-soft: #6B7280;
+    --sky-dawn: #E8F1FE;
+    --sky-day: #D9E9FF;
+    --ink: #123C7A;
+    --ink-soft: #5E7290;
     --surface: #FFFFFF;
-    --line: #E2E6EE;
-    --sun: #F5A623;
-    --sun-soft: #FCE3B6;
-    --done: #2F9E64;
-    --done-soft: #DCF3E6;
+    --line: #DCE6F5;
+    --sun: #F5820A;
+    --sun-soft: #FDE3C4;
+    --done: #2E6FF2;
+    --done-soft: #DCE9FF;
+    --pending: #F5820A;
+    --pending-soft: #FDE3C4;
     --danger: #E15A5A;
   }
 
@@ -34,19 +36,21 @@
     padding: 32px 16px 80px;
   }
 
-  .app {
-    width: 100%;
-    max-width: 520px;
-  }
+  .app { width: 100%; max-width: 720px; }
 
   header {
-    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
   }
 
   .greeting {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 32px;
+    font-size: 30px;
     letter-spacing: -0.02em;
     margin: 0 0 4px;
   }
@@ -58,66 +62,97 @@
     text-transform: capitalize;
   }
 
-  /* --- Signature element: horizon progress --- */
-  .horizon {
-    margin-top: 20px;
+  .tabs {
+    display: inline-flex;
     background: var(--surface);
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 18px 20px;
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
   }
 
-  .horizon-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 12px;
-  }
-
-  .horizon-label {
+  .tab {
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 13px;
+    font-weight: 600;
+    border: none;
+    background: none;
     color: var(--ink-soft);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
   }
 
-  .horizon-count {
+  .tab.active { background: var(--ink); color: #fff; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .stat-label { font-size: 12px; color: var(--ink-soft); margin: 0 0 6px; }
+
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .stat-value.total { color: var(--ink); }
+  .stat-value.done { color: var(--done); }
+  .stat-value.pending { color: var(--pending); }
+  .stat-value.scheduled { color: var(--sun); }
+
+  @media (max-width: 560px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .history-strip {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+
+  .history-chip {
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    min-width: 92px;
+    text-align: left;
+  }
+
+  .history-chip.active { border-color: var(--ink); background: var(--ink); }
+  .history-chip.active .hc-date, .history-chip.active .hc-count { color: #fff; }
+
+  .hc-date {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 11px;
+    color: var(--ink-soft);
+    display: block;
+    margin-bottom: 4px;
   }
 
-  .horizon-track {
-    position: relative;
-    height: 8px;
-    background: #EEF0F4;
-    border-radius: 999px;
-    overflow: visible;
-  }
+  .hc-count { font-size: 13px; font-weight: 600; color: var(--ink); }
 
-  .horizon-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--sun-soft), var(--sun));
-    transition: width 0.5s ease;
-    width: 0%;
-  }
+  .history-empty { font-size: 13px; color: var(--ink-soft); }
 
-  .horizon-sun {
-    position: absolute;
-    top: 50%;
-    width: 16px;
-    height: 16px;
-    background: var(--sun);
-    border: 3px solid var(--surface);
-    border-radius: 50%;
-    box-shadow: 0 0 0 1px var(--sun);
-    transform: translate(-50%, -50%);
-    left: 0%;
-    transition: left 0.5s ease;
-  }
-
-  /* --- Composer --- */
   .composer {
-    margin-top: 20px;
+    margin-bottom: 20px;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 16px;
@@ -127,10 +162,7 @@
     gap: 10px;
   }
 
-  .composer-row {
-    display: flex;
-    gap: 8px;
-  }
+  .composer-row { display: flex; gap: 8px; }
 
   input[type="text"], input[type="time"] {
     font-family: 'Inter', sans-serif;
@@ -146,10 +178,7 @@
   input[type="text"] { flex: 1; min-width: 0; }
   input[type="time"] { width: 118px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
 
-  input[type="text"]:focus, input[type="time"]:focus {
-    border-color: var(--sun);
-    background: #fff;
-  }
+  input[type="text"]:focus, input[type="time"]:focus { border-color: var(--sun); background: #fff; }
 
   button.add-btn {
     font-family: 'Space Grotesk', sans-serif;
@@ -166,24 +195,25 @@
   button.add-btn:hover { background: #33415A; }
   button.add-btn:disabled { opacity: 0.5; cursor: default; }
 
-  .hint {
+  .hint { font-size: 12px; color: var(--ink-soft); }
+
+  .readonly-note {
     font-size: 12px;
     color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
   }
 
-  /* --- Task list --- */
-  .list {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .list { display: flex; flex-direction: column; gap: 10px; }
 
   .task {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 14px 14px;
+    padding: 14px;
     display: flex;
     align-items: flex-start;
     gap: 12px;
@@ -205,29 +235,14 @@
     margin-top: 1px;
   }
 
-  .checkbox.checked {
-    background: var(--done);
-    border-color: var(--done);
-    color: #fff;
-    font-size: 12px;
-  }
+  .checkbox.locked { cursor: default; }
+  .checkbox.checked { background: var(--done); border-color: var(--done); color: #fff; font-size: 12px; }
 
   .task-body { flex: 1; min-width: 0; }
-
-  .task-text {
-    font-size: 15px;
-    line-height: 1.4;
-    word-break: break-word;
-  }
-
+  .task-text { font-size: 15px; line-height: 1.4; word-break: break-word; }
   .task.done .task-text { text-decoration: line-through; }
 
-  .task-meta {
-    margin-top: 4px;
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
+  .task-meta { margin-top: 4px; display: flex; gap: 8px; align-items: center; }
 
   .time-badge {
     font-family: 'JetBrains Mono', monospace;
@@ -238,10 +253,7 @@
     border-radius: 999px;
   }
 
-  .notified-badge {
-    font-size: 11px;
-    color: var(--ink-soft);
-  }
+  .notified-badge { font-size: 11px; color: var(--ink-soft); }
 
   .delete-btn {
     flex-shrink: 0;
@@ -256,18 +268,8 @@
 
   .delete-btn:hover { color: var(--danger); }
 
-  .empty {
-    margin-top: 32px;
-    text-align: center;
-    color: var(--ink-soft);
-    font-size: 14px;
-  }
-
-  .empty-sun {
-    font-size: 28px;
-    display: block;
-    margin-bottom: 8px;
-  }
+  .empty { margin-top: 32px; text-align: center; color: var(--ink-soft); font-size: 14px; }
+  .empty-sun { font-size: 28px; display: block; margin-bottom: 8px; }
 
   .status-note {
     margin-top: 28px;
@@ -281,22 +283,42 @@
 <body>
   <div class="app">
     <header>
-      <p class="greeting" id="greeting">Pagi!</p>
-      <p class="datestamp" id="datestamp"></p>
+      <div>
+        <p class="greeting" id="greeting">Pagi!</p>
+        <p class="datestamp" id="datestamp"></p>
+      </div>
+      <div class="tabs">
+        <button class="tab active" id="tab-today">Hari ini</button>
+        <button class="tab" id="tab-history">Riwayat</button>
+      </div>
     </header>
 
-    <div class="horizon">
-      <div class="horizon-top">
-        <span class="horizon-label">Progres hari ini</span>
-        <span class="horizon-count" id="progress-count">0 / 0</span>
+    <div class="stats">
+      <div class="stat-card">
+        <p class="stat-label">Total task</p>
+        <p class="stat-value total" id="stat-total">0</p>
       </div>
-      <div class="horizon-track">
-        <div class="horizon-fill" id="horizon-fill"></div>
-        <div class="horizon-sun" id="horizon-sun"></div>
+      <div class="stat-card">
+        <p class="stat-label">Selesai</p>
+        <p class="stat-value done" id="stat-done">0</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Belum</p>
+        <p class="stat-value pending" id="stat-pending">0</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">Terjadwal</p>
+        <p class="stat-value scheduled" id="stat-scheduled">0</p>
       </div>
     </div>
 
-    <div class="composer">
+    <div id="history-panel" style="display:none;">
+      <div class="history-strip" id="history-strip">
+        <span class="history-empty">Memuat riwayat...</span>
+      </div>
+    </div>
+
+    <div class="composer" id="composer">
       <div class="composer-row">
         <input type="text" id="task-input" placeholder="Apa yang mau dikerjakan?" maxlength="140" />
         <input type="time" id="time-input" />
@@ -307,10 +329,14 @@
       </div>
     </div>
 
+    <div class="readonly-note" id="readonly-note" style="display:none;">
+      Lihat riwayat tanggal <strong id="readonly-date"></strong> — mode lihat saja, gak bisa diedit.
+    </div>
+
     <div class="list" id="list"></div>
     <div class="empty" id="empty" style="display:none;">
       <span class="empty-sun">☀️</span>
-      Belum ada rencana hari ini. Tulis yang pertama di atas.
+      <span id="empty-text">Belum ada rencana hari ini. Tulis yang pertama di atas.</span>
     </div>
 
     <p class="status-note">Reminder Telegram dicek otomatis tiap 15 menit sesuai jam yang kamu set.</p>
@@ -318,6 +344,10 @@
 
 <script>
   const API = "/api/tasks";
+  const HISTORY_API = "/api/history";
+
+  let viewDate = null;
+  let editable = true;
 
   function todayKey() {
     const d = new Date();
@@ -327,6 +357,11 @@
     return `${yyyy}-${mm}-${dd}`;
   }
 
+  function formatDateLabel(dateStr) {
+    const d = new Date(dateStr + "T00:00:00");
+    return d.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  }
+
   function setGreeting() {
     const hour = new Date().getHours();
     const el = document.getElementById("greeting");
@@ -334,14 +369,10 @@
     else if (hour < 15) el.textContent = "Siang, semangat!";
     else if (hour < 18) el.textContent = "Sore, dikit lagi!";
     else el.textContent = "Malam, kelarin dulu yuk!";
-
-    document.getElementById("datestamp").textContent = new Date().toLocaleDateString("id-ID", {
-      weekday: "long", day: "numeric", month: "long", year: "numeric"
-    });
   }
 
-  async function fetchTasks() {
-    const res = await fetch(`${API}?date=${todayKey()}`);
+  async function fetchTasks(date) {
+    const res = await fetch(`${API}?date=${date}`);
     const data = await res.json();
     render(data.tasks || []);
   }
@@ -354,7 +385,7 @@
 
     const btn = document.getElementById("add-btn");
     btn.disabled = true;
-    const res = await fetch(`${API}?date=${todayKey()}`, {
+    const res = await fetch(`${API}?date=${viewDate}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, time: timeInput.value || null }),
@@ -368,7 +399,8 @@
   }
 
   async function toggleTask(id, done) {
-    const res = await fetch(`${API}?date=${todayKey()}`, {
+    if (!editable) return;
+    const res = await fetch(`${API}?date=${viewDate}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, done }),
@@ -378,7 +410,8 @@
   }
 
   async function deleteTask(id) {
-    const res = await fetch(`${API}?date=${todayKey()}`, {
+    if (!editable) return;
+    const res = await fetch(`${API}?date=${viewDate}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -390,13 +423,14 @@
   function render(tasks) {
     const list = document.getElementById("list");
     const empty = document.getElementById("empty");
+    const emptyText = document.getElementById("empty-text");
     list.innerHTML = "";
 
-    if (tasks.length === 0) {
-      empty.style.display = "block";
-    } else {
-      empty.style.display = "none";
-    }
+    emptyText.textContent = editable
+      ? "Belum ada rencana hari ini. Tulis yang pertama di atas."
+      : "Gak ada task tercatat di tanggal ini.";
+
+    empty.style.display = tasks.length === 0 ? "block" : "none";
 
     tasks
       .slice()
@@ -405,7 +439,7 @@
         const el = document.createElement("div");
         el.className = "task" + (task.done ? " done" : "");
         el.innerHTML = `
-          <div class="checkbox ${task.done ? "checked" : ""}">${task.done ? "✓" : ""}</div>
+          <div class="checkbox ${task.done ? "checked" : ""} ${editable ? "" : "locked"}">${task.done ? "✓" : ""}</div>
           <div class="task-body">
             <div class="task-text"></div>
             <div class="task-meta">
@@ -413,29 +447,98 @@
               ${task.time && task.notified ? `<span class="notified-badge">terkirim ke Telegram</span>` : ""}
             </div>
           </div>
-          <button class="delete-btn" title="Hapus">×</button>
+          ${editable ? `<button class="delete-btn" title="Hapus">×</button>` : ""}
         `;
         el.querySelector(".task-text").textContent = task.text;
-        el.querySelector(".checkbox").addEventListener("click", () => toggleTask(task.id, !task.done));
-        el.querySelector(".delete-btn").addEventListener("click", () => deleteTask(task.id));
+        if (editable) {
+          el.querySelector(".checkbox").addEventListener("click", () => toggleTask(task.id, !task.done));
+          el.querySelector(".delete-btn").addEventListener("click", () => deleteTask(task.id));
+        }
         list.appendChild(el);
       });
 
     const doneCount = tasks.filter((t) => t.done).length;
     const total = tasks.length;
-    const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
-    document.getElementById("progress-count").textContent = `${doneCount} / ${total}`;
-    document.getElementById("horizon-fill").style.width = `${pct}%`;
-    document.getElementById("horizon-sun").style.left = `${pct}%`;
+    const pending = total - doneCount;
+    const scheduled = tasks.filter((t) => t.time).length;
+
+    document.getElementById("stat-total").textContent = total;
+    document.getElementById("stat-done").textContent = doneCount;
+    document.getElementById("stat-pending").textContent = pending;
+    document.getElementById("stat-scheduled").textContent = scheduled;
+  }
+
+  async function loadHistoryStrip() {
+    const strip = document.getElementById("history-strip");
+    try {
+      const res = await fetch(HISTORY_API);
+      const data = await res.json();
+      const history = (data.history || []).filter((h) => h.date !== todayKey());
+
+      if (history.length === 0) {
+        strip.innerHTML = `<span class="history-empty">Belum ada riwayat sebelumnya.</span>`;
+        return;
+      }
+
+      strip.innerHTML = "";
+      history.forEach((h) => {
+        const chip = document.createElement("div");
+        chip.className = "history-chip";
+        const d = new Date(h.date + "T00:00:00");
+        const label = d.toLocaleDateString("id-ID", { day: "2-digit", month: "short" });
+        chip.innerHTML = `<span class="hc-date">${label}</span><span class="hc-count">${h.done}/${h.total} selesai</span>`;
+        chip.addEventListener("click", () => selectHistoryDate(h.date, chip));
+        strip.appendChild(chip);
+      });
+    } catch (e) {
+      strip.innerHTML = `<span class="history-empty">Gagal memuat riwayat.</span>`;
+    }
+  }
+
+  function selectHistoryDate(date, chipEl) {
+    document.querySelectorAll(".history-chip").forEach((c) => c.classList.remove("active"));
+    if (chipEl) chipEl.classList.add("active");
+
+    viewDate = date;
+    editable = false;
+    document.getElementById("composer").style.display = "none";
+    document.getElementById("readonly-note").style.display = "block";
+    document.getElementById("readonly-date").textContent = formatDateLabel(date);
+    document.getElementById("datestamp").textContent = formatDateLabel(date);
+    fetchTasks(date);
+  }
+
+  function switchTab(mode) {
+    document.getElementById("tab-today").classList.toggle("active", mode === "today");
+    document.getElementById("tab-history").classList.toggle("active", mode === "history");
+    document.getElementById("history-panel").style.display = mode === "history" ? "block" : "none";
+
+    if (mode === "today") {
+      viewDate = todayKey();
+      editable = true;
+      document.getElementById("composer").style.display = "flex";
+      document.getElementById("readonly-note").style.display = "none";
+      document.getElementById("datestamp").textContent = formatDateLabel(viewDate);
+      fetchTasks(viewDate);
+    } else {
+      editable = false;
+      document.getElementById("composer").style.display = "none";
+      loadHistoryStrip();
+      document.getElementById("readonly-note").style.display = "none";
+    }
   }
 
   document.getElementById("add-btn").addEventListener("click", addTask);
   document.getElementById("task-input").addEventListener("keydown", (e) => {
     if (e.key === "Enter") addTask();
   });
+  document.getElementById("tab-today").addEventListener("click", () => switchTab("today"));
+  document.getElementById("tab-history").addEventListener("click", () => switchTab("history"));
 
   setGreeting();
-  fetchTasks();
+  viewDate = todayKey();
+  document.getElementById("datestamp").textContent = formatDateLabel(viewDate);
+  fetchTasks(viewDate);
 </script>
 </body>
 </html>
